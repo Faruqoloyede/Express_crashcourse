@@ -10,13 +10,19 @@ let posts = [
     {id:3, title: 'Post Three'},
 ]
 
-// setup static folder
 
-// app.use(express.static(path.join(__dirname, 'public')));
-
+// get all posts
 app.get('/api/posts', (req, res)=>{
     res.json(posts);
+});
+
+// get single posts
+app.get('/api/posts/:id', (req, res)=>{
+    const id = parseInt(req.params.id);
+    const data = posts.filter((post)=> post.id === id);
+    res.json(data);
 })
+
 
 app.listen(port, ()=>{
     console.log(`server is running on port ${port}`)
