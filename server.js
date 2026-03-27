@@ -15,17 +15,21 @@ let posts = [
 app.get('/api/posts', (req, res)=>{
     const limit = parseInt(req.query.limit)
     if(!isNaN(limit) && limit > 0){
-        res.json(posts.slice(0,limit));
+        res.status(200).json(posts.slice(0,limit));
     }else{
-        res.json(posts);
+        res.status(200).json(posts);
     }
 });
 
 // get single posts
 app.get('/api/posts/:id', (req, res)=>{
     const id = parseInt(req.params.id);
-    const data = posts.filter((post)=> post.id === id);
-    res.json(data);
+    const post = posts.find((post)=> post.id === id);
+    if(!post){
+        res.status(404).json({messahe: `Post with id ${id} not found`})
+    }else{
+        res.status(200).json(post);
+    }
 })
 
 
