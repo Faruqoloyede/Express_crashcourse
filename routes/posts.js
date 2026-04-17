@@ -1,4 +1,4 @@
-const express = require('express');
+import express from 'express'
 const router = express.Router();
 
 let posts = [
@@ -27,4 +27,29 @@ router.get('/:id', (req, res)=>{
         res.status(200).json(post);
 });
 
-module.exports = router
+// create new psot
+router.post('/', (req, res)=>{
+    const newPost = {
+        id: posts.length + 1,
+        title: req.body.title
+    };
+    if(!newPost){
+        return res.status(400).json({message: "Please incluse a title"})
+    }
+    posts.push(newPost);
+    res.status(201).json(posts);
+});
+
+// update post
+router.put('/:id', (req, res)=>{
+    const id = parseInt(req.params.id);
+    const post = posts.find((post)=> post.id === id);
+
+    if(!post){
+        return res.status(404).json({message: `A post with the id of ${id} was not found `})
+    }
+    post.title = req.body.title;
+    res.status(200).json(posts)
+})
+
+export default router
